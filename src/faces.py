@@ -8,7 +8,7 @@ def main():
         facit_path = sys.argv[2]
         test_path = sys.argv[3]
 
-        
+
         training_set = fileIO.open_images(training_path)
         facit_set = fileIO.open_answers(facit_path)
         test_set = fileIO.open_images(test_path)

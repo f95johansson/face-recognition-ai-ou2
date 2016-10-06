@@ -11,11 +11,15 @@ class Perceptron:
             raise ValueError('Wrong number of inputs')
 
         a = self.check(inputs)
+        total_error =0
 
         for i in range(len(inputs)):
             error = answer - a
+            total_error+=error
             delta_weight = self._learning_rate * error * inputs[i]
             self.weights[i] = self.weights[i] + delta_weight
+        return total_error
+
 
 
     def check(self, inputs):
