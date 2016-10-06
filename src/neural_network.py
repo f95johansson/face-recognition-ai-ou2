@@ -22,22 +22,29 @@ class NeuralNetwork:
         counter = self._input_size*len(self._training_set)*len(self._perceptrons)
         total_error+=self.learning_step()
         n = 0
-        while total_error/counter > 17:
+
+        threshold = 20
+
+        """
+        19 -> 71%
+        """
+
+        while total_error/counter > threshold:
             n += 1
             counter+=self._input_size*len(self._training_set)*len(self._perceptrons)
             total_error+=self.learning_step()
-            print(n, total_error/counter)
+            #print(n, total_error/counter)
 
     def check(self, test_set):
-        with open('result.txt', 'w') as file:
-            for id in test_set.keys():
-                image = test_set[id]
-                answers = {}
-                for mood, perceptron in self._perceptrons.items():
-                    answers[perceptron.check(image)] = mood
-                final_answer = answers[max(answers.keys())]
-                #print('Image{} {}'.format(id, final_answer))
-                file.write('Image{} {}\n'.format(id, final_answer.value))
+        #with open('result.txt', 'w') as file:
+        for id in test_set.keys():
+            image = test_set[id]
+            answers = {}
+            for mood, perceptron in self._perceptrons.items():
+                answers[perceptron.check(image)] = mood
+            final_answer = answers[max(answers.keys())]
+            print('Image{} {}'.format(id, final_answer.value))
+            #file.write('Image{} {}\n'.format(id, final_answer.value))
 
     def learning_step(self):
          ids = list(self._training_set.keys())
