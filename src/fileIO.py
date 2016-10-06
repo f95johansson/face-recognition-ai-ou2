@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+from preprocessing import highpass_filter
 class InvalidFileError(Exception):pass
 
 def open_images(path):
@@ -22,6 +22,7 @@ def open_images(path):
                     current_image_line -= 1
                     if current_image_line == 0:
                         current_image.append(1) # bias
+                        highpass_filter(current_image)
                         training_images[current_id] = current_image
                         current_image = []
                         current_id = None
