@@ -1,5 +1,10 @@
 from collections import OrderedDict
 from preprocessing import highpass_filter
+from preprocessing import rotate
+from preprocessing import normalize
+from preprocessing import IMAGE_SIZE
+
+
 class InvalidFileError(Exception):pass
 
 def open_images(path):
@@ -15,12 +20,14 @@ def open_images(path):
                     image_row_strings=line.split(' ')
                     for pixel in image_row_strings:
                         try:
-                            current_image.append(int(pixel) / 32)
+                            current_image.append(int(pixel))
                         except ValueError:
                             raise InvalidFileError()
 
                     current_image_line -= 1
                     if current_image_line == 0:
+                        current_image = rotate(current_image)
+                        current_image = normalize(current_image)
                         current_image.append(1) # bias
                         highpass_filter(current_image)
                         training_images[current_id] = current_image
@@ -30,7 +37,7 @@ def open_images(path):
                 elif line.startswith('Image'):
                     header, current_id = _get_header(line)
                     if len(header) == 1:
-                        current_image_line = 20
+                        current_image_line = IMAGE_SIZE
                     else:
                         raise InvalidFileError()
     return training_images
@@ -44,7 +51,7 @@ def open_answers(path):
             if len(line) != 0 and line[0] != '#' and line[0]!='\n':
                 if line.startswith('Image'):
                     header, current_id = _get_header(line)
-                    if len(header) == 2:
+                    if len(header) == 2: # form: "Imaged1 1" = facit
                         facit = _get_facit(header)
                         facit_values[current_id] = facit
                     else:

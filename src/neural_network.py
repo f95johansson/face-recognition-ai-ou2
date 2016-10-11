@@ -30,7 +30,6 @@ class NeuralNetwork:
         19 -> 71%
         20 -> 70.7%
         """
-
         while total_error/counter > threshold:
             counter+=self._input_size*len(self._training_set)*len(self._perceptrons)
             total_error+=self.learning_step()
