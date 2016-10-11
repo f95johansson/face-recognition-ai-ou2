@@ -24,17 +24,9 @@ class NeuralNetwork:
 
         threshold = 18
 
-        """
-        17 -> 70.13%
-        18 -> 71.25%
-        19 -> 71%
-        20 -> 70.7%
-        """
-
         while total_error/counter > threshold:
             counter+=self._input_size*len(self._training_set)*len(self._perceptrons)
             total_error+=self.learning_step()
-            #import sys; print(n, total_error/counter, file=sys.stderr)
 
     def check(self, test_set):
         for id in test_set.keys():

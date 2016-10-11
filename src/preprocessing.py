@@ -6,14 +6,14 @@ from math import degrees
 IMAGE_SIZE = 20
 HIGHEST_PIXEL_VALUE = 31
 
+def normalize(image):
+    return [x / HIGHEST_PIXEL_VALUE for x in image]
+
 def highpass_filter(image):
     for i,value in enumerate(image):
         if value <= 8:
             image[i] = 0
     return image
-
-def normalize(image):
-    return [x / HIGHEST_PIXEL_VALUE for x in image]
 
 def contrast(image_list):
     image = Image.new('L', (IMAGE_SIZE, IMAGE_SIZE)) # L = 8bit grayscale
