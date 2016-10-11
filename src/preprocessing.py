@@ -1,4 +1,5 @@
 from PIL import Image
+from PIL import ImageEnhance
 from math import atan2
 from math import degrees
 
@@ -12,6 +13,12 @@ def highpass_filter(image):
 
 def normalize(image):
     return [x / HIGHEST_PIXEL_VALUE for x in image]
+
+def contrast(image_list):
+    image = Image.new('L', (IMAGE_SIZE, IMAGE_SIZE)) # L = 8bit grayscale
+    image.putdata(image_list)
+    image = ImageEnhance.Contrast(image)
+    return list(image.enchance(.25).getdata())
 
 def rotate(image_list):
     darkest_pixels = _get_darkest_pixels(image_list)

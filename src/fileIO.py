@@ -2,6 +2,7 @@ from collections import OrderedDict
 from preprocessing import highpass_filter
 from preprocessing import rotate
 from preprocessing import normalize
+from preprocessing import contrast
 from preprocessing import IMAGE_SIZE
 
 
@@ -27,6 +28,7 @@ def open_images(path):
                     current_image_line -= 1
                     if current_image_line == 0:
                         current_image = rotate(current_image)
+                        current_image = contrast(current_image)
                         current_image = normalize(current_image)
                         current_image.append(1) # bias
                         highpass_filter(current_image)
