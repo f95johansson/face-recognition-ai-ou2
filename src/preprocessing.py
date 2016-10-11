@@ -8,8 +8,9 @@ HIGHEST_PIXEL_VALUE = 31
 
 def highpass_filter(image):
     for i,value in enumerate(image):
-        if value <= 5/31:
+        if value <= 8:
             image[i] = 0
+    return image
 
 def normalize(image):
     return [x / HIGHEST_PIXEL_VALUE for x in image]
@@ -19,7 +20,7 @@ def contrast(image_list):
     image_list = [x * 255 / HIGHEST_PIXEL_VALUE for x in image_list]
     image.putdata(image_list)
     image = ImageEnhance.Contrast(image)
-    image_list = list(image.enhance(.25).getdata())
+    image_list = list(image.enhance(4).getdata())
     image_list = [x * HIGHEST_PIXEL_VALUE / 255 for x in image_list]
     return image_list
 
