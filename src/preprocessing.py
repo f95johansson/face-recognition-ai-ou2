@@ -16,9 +16,12 @@ def normalize(image):
 
 def contrast(image_list):
     image = Image.new('L', (IMAGE_SIZE, IMAGE_SIZE)) # L = 8bit grayscale
+    image_list = [x * 255 / HIGHEST_PIXEL_VALUE for x in image_list]
     image.putdata(image_list)
     image = ImageEnhance.Contrast(image)
-    return list(image.enchance(.25).getdata())
+    image_list = list(image.enhance(.25).getdata())
+    image_list = [x * HIGHEST_PIXEL_VALUE / 255 for x in image_list]
+    return image_list
 
 def rotate(image_list):
     darkest_pixels = _get_darkest_pixels(image_list)
