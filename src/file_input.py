@@ -26,7 +26,7 @@ def open_images(path):
                     if current_image_line == 0:
                         current_image = pre.rotate(current_image)
                         current_image = pre.normalize(current_image)
-                        current_image.append(1) # bias
+                        #current_image.append(1) # bias
                         training_images[current_id] = current_image
                         current_image = []
                         current_id = None
@@ -48,7 +48,7 @@ def open_answers(path):
             if len(line) != 0 and line[0] != '#' and line[0]!='\n':
                 if line.startswith('Image'):
                     header, current_id = _get_header(line)
-                    if len(header) == 2: # form: "Imaged1 1" = facit
+                    if len(header) == 2: # form: "Image1 1" = facit
                         facit = _get_facit(header)
                         facit_values[current_id] = facit
                     else:
@@ -62,7 +62,7 @@ def _get_header(line):
     try:
         header.remove('')
     except ValueError:
-        pass
+        pass # if no ''
     id = header[0].replace('Image', '')
     try:
         return header, int(id)

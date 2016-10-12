@@ -9,7 +9,7 @@ class NeuralNetwork:
     def __init__(self, training_set, facit_set):
         self._training_set = training_set
         self._facit_set = facit_set
-        self._input_size = len(next(iter(training_set.values())))
+        self._input_size = len(next(iter(training_set.values()))) # first value
         self._perceptrons = {
             Moods.happy:       Perceptron(LEARNING_RATE, self._input_size),
             Moods.sad:         Perceptron(LEARNING_RATE, self._input_size),
@@ -18,15 +18,15 @@ class NeuralNetwork:
         }
 
     def learn(self):
-        total_error =0
-        counter = self._input_size*len(self._training_set)*len(self._perceptrons)
+        total_error = 0
+        threshold = 0.05
+
+        counter = len(self._training_set)*len(self._perceptrons)
         total_error+=self.learning_step()
 
-        threshold = 18
-
         while total_error/counter > threshold:
-            counter+=self._input_size*len(self._training_set)*len(self._perceptrons)
-            total_error+=self.learning_step()
+            counter += len(self._training_set)*len(self._perceptrons)
+            total_error +=self.learning_step()
 
     def check(self, test_set):
         for id in test_set.keys():

@@ -28,10 +28,10 @@ def rotate(image_list):
     darkest_pixels = _get_darkest_pixels(image_list)
     x, y = _calculate_mean_position(darkest_pixels)
     # move origin point to middle of image
-    x -= IMAGE_SIZE // 2 
+    x -= IMAGE_SIZE // 2
     y -= IMAGE_SIZE // 2
 
-    rotation = degrees(atan2(y, x))
+    rotation = degrees(atan2(y, x)) + 90
 
     image = Image.new('L', (IMAGE_SIZE, IMAGE_SIZE)) # L = 8bit grayscale
     image.putdata(image_list)
