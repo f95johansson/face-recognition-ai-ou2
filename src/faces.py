@@ -12,9 +12,9 @@ def main():
         print('Invalid arguments')
 
     else:
-        training_set = file_input.open_images(training_path)
-        facit_set = file_input.open_answers(facit_path)
-        test_set = file_input.open_images(test_path)
+        training_set = file_input.open_file(training_path)
+        facit_set = file_input.open_file(facit_path)
+        test_set = file_input.open_file(test_path, ordered=True)
 
         network = NeuralNetwork(training_set, facit_set)
         network.learn()

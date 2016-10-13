@@ -5,73 +5,46 @@ from preprocessing import IMAGE_SIZE
 
 class InvalidFileError(Exception):pass
 
-def open_images(path):
-    training_images = OrderedDict()
-
-    current_image_line = 0
-    current_image = []
-    current_id = None
+def open_file(path, ordered=False):
+    data = {} if not ordered else OrderedDict()
     with open(path) as file:
-        for line in file:
-            if len(line) != 0 and line[0] != '#' and line[0] != '\n':
-                if current_image_line > 0:
-                    image_row_strings=line.split(' ')
-                    for pixel in image_row_strings:
-                        try:
-                            current_image.append(int(pixel))
-                        except ValueError:
-                            raise InvalidFileError()
+        try:
+            iterator = iter(file)
 
-                    current_image_line -= 1
-                    if current_image_line == 0:
-                        current_image = pre.rotate(current_image)
-                        current_image = pre.normalize(current_image)
-                        #current_image.append(1) # bias
-                        training_images[current_id] = current_image
-                        current_image = []
-                        current_id = None
-
+            while True:
+                line = iterator.__next__().rstrip()
+                if line.startswith('#'): pass
+                elif line == '': pass
                 elif line.startswith('Image'):
-                    header, current_id = _get_header(line)
-                    if len(header) == 1:
-                        current_image_line = IMAGE_SIZE
+                    if ' ' in line:
+                        id, answer = _read_answer(line)
+                        data[id] = answer
                     else:
-                        raise InvalidFileError()
-    return training_images
-
-
-def open_answers(path):
-    facit_values = {}
-
-    with open(path) as file:
-        for line in file:
-            if len(line) != 0 and line[0] != '#' and line[0]!='\n':
-                if line.startswith('Image'):
-                    header, current_id = _get_header(line)
-                    if len(header) == 2: # form: "Image1 1" = facit
-                        facit = _get_facit(header)
-                        facit_values[current_id] = facit
-                    else:
-                        raise InvalidFileError()
+                        id = _read_id(line)
+                        image = _read_image(iterator)
+                        image = pre.rotate(image)
+                        image = pre.normalize(image)
+                        data[id] = image
                 else:
-                    raise InvalidFileError()
-    return facit_values
+                    raise InvalidFileError("With line: "+line)
 
-def _get_header(line):
-    header = line.split(' ')
-    try:
-        header.remove('')
-    except ValueError:
-        pass # if no ''
-    id = header[0].replace('Image', '')
-    try:
-        return header, int(id)
-    except ValueError:
-        raise InvalidFileError()
+        except StopIteration:
+            pass
+        except ValueError:
+            raise InvalidFileError()
+    return data
 
-def _get_facit(header):
-    facit = header[1]
-    try:
-        return int(facit)
-    except ValueError:
-        raise InvalidFileError()
+def _read_answer(line):
+    id_string, answer_string = line.split(' ')
+    id = int(id_string[len('Image'):])
+    answer = int(answer_string)
+    return id, answer
+
+def _read_id(line):
+    return int(line[len('Image'):])
+
+def _read_image(iterator):
+    image = []
+    for i in range(IMAGE_SIZE):
+        image.extend(list(map(int, iterator.__next__().split(' '))))
+    return image
