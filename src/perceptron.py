@@ -7,6 +7,10 @@ class Perceptron:
         self.weights = [(random()-.5)/100 for i in range(number_of_input)]
 
     def train(self, inputs, answer):
+        """
+        Adjust the weights based on the inputs and the corresponding answers.
+        Returns error
+        """
         a = self.check(inputs)
         error = answer - a
 
@@ -17,6 +21,9 @@ class Perceptron:
 
 
     def check(self, inputs):
+        """
+        Returns activation value given from the summation of inputs and weights
+        """
         if len(inputs) != len(self.weights):
             raise ValueError('Wrong number of inputs')
 
@@ -28,4 +35,5 @@ class Perceptron:
 
 
 def activation_function(x):
+    """Sigmoid logistic activation function"""
     return 1/(1+exp(-x))

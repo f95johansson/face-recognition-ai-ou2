@@ -7,15 +7,18 @@ IMAGE_SIZE = 20
 HIGHEST_PIXEL_VALUE = 31
 
 def normalize(image):
+    """Returns image with pixel values between 0-1"""
     return [x / HIGHEST_PIXEL_VALUE for x in image]
 
 def highpass_filter(image):
+    """Perform highpass filter on a non-normalized image"""
     for i,value in enumerate(image):
         if value <= 8:
             image[i] = 0
     return image
 
 def contrast(image_list):
+    """Increases the image contrast on a non-normalized image"""
     image = Image.new('L', (IMAGE_SIZE, IMAGE_SIZE)) # L = 8bit grayscale
     image_list = [x * 255 / HIGHEST_PIXEL_VALUE for x in image_list]
     image.putdata(image_list)
@@ -25,6 +28,7 @@ def contrast(image_list):
     return image_list
 
 def rotate(image_list):
+    """Rotates the image with the eyes always pointing upwards"""
     darkest_pixels = _get_darkest_pixels(image_list)
     x, y = _calculate_mean_position(darkest_pixels)
     # move origin point to middle of image
@@ -39,7 +43,12 @@ def rotate(image_list):
     return list(image.rotate(rotation).getdata())
 
 def _get_darkest_pixels(image_list, dark_count=30):
-    darkest_pixels = [] # pixel -> position
+    """
+    Returns a list of the darkest pixel values in image
+    List consits of tuples with a tuple of (pixel, position)
+    """
+
+    darkest_pixels = [] # consits of tutple of (pixel, position)
     lightest_dark_pixel = None
     for position, pixel in enumerate(image_list):
         if len(darkest_pixels) < dark_count:
@@ -63,6 +72,7 @@ def _get_darkest_pixels(image_list, dark_count=30):
     return darkest_pixels
 
 def _calculate_mean_position(pixels):
+    """Calculates the mean position of all values in pixels"""
     # pixels: (pixel, position)
     mean_y = 0
     mean_x = 0
