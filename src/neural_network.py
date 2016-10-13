@@ -5,7 +5,10 @@ from random import shuffle
 LEARNING_RATE = 0.01
 
 class NeuralNetwork:
-
+    """
+        Keeps track of the perceptron. Controls when the perceptron are
+        training and when to test.
+    """
     def __init__(self, training_set, facit_set):
         self._training_set = training_set
         self._facit_set = facit_set
@@ -18,6 +21,11 @@ class NeuralNetwork:
         }
 
     def learn(self):
+        """
+            This method is the part where the program learns the perceptron to
+            recognize moods in pictures. It keeps track of the total error in
+            order to quit the learningface when the error is small enough.
+        """
         total_error = 0
         threshold = 0.05
 
@@ -29,6 +37,10 @@ class NeuralNetwork:
             total_error +=self.learning_step()
 
     def check(self, test_set):
+        """
+            This is the method used when the image answer is not available for
+            the program to read.  
+        """
         for id in test_set.keys():
             image = test_set[id]
             answers = {}
@@ -38,6 +50,12 @@ class NeuralNetwork:
             print('Image{} {}'.format(id, final_answer.value))
 
     def learning_step(self):
+        """
+            This is where the actual trining is happening. The method sends an
+            image with it's answer to the perceptron. One training session is
+            one lap with a specific set of picture. It also returns the total
+            error of that session.
+        """
          ids = list(self._training_set.keys())
          shuffle(ids)
          total_error=0
