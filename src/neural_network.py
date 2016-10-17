@@ -8,6 +8,8 @@ class NeuralNetwork:
     """
     Keeps track of the perceptron. Controls when the perceptron are
     training and when to test.
+    :param training_set: the set of images to train on
+    :param facit_set: the set of facit to the training_set
     """
     def __init__(self, training_set, facit_set):
         self._training_set = training_set
@@ -39,7 +41,8 @@ class NeuralNetwork:
     def check(self, test_set):
         """
         This is the method used when the image answer is not available for
-        the program to read.  
+        the program to read.
+        :param test_set: Set of data to test the NeuralNetwork with  
         """
         for id in test_set.keys():
             image = test_set[id]

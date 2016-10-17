@@ -4,7 +4,7 @@ from neural_network import NeuralNetwork
 
 def main():
     """
-    Takes 3 arguments in forms of paths to text files.
+    Takes 3 arguments from command line in forms of paths to text files.
     Path to: trainging images, training answers and test images
     """
     try:
