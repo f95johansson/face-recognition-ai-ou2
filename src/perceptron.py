@@ -10,11 +10,13 @@ class Perceptron:
         """
         Adjust the weights based on the inputs and the corresponding answers.
         Returns error
+        :param inputs: images to train on
+        :param answer: correct answers to the images
         """
         a = self.check(inputs)
         error = answer - a
 
-        for i in range(len(inputs)):    
+        for i in range(len(inputs)):
             delta_weight = self._learning_rate * error * inputs[i]
             self.weights[i] += delta_weight
         return error
@@ -23,6 +25,7 @@ class Perceptron:
     def check(self, inputs):
         """
         Returns activation value given from the summation of inputs and weights
+        :param inputs: images to train on
         """
         if len(inputs) != len(self.weights):
             raise ValueError('Wrong number of inputs')
@@ -35,5 +38,8 @@ class Perceptron:
 
 
 def activation_function(x):
-    """Sigmoid logistic activation function"""
+    """
+        Sigmoid logistic activation function
+        :param x: Summation of the error to be used in the function. 
+    """
     return 1/(1+exp(-x))
